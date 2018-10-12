@@ -224,15 +224,21 @@ void ssd1306_update(int x0, int y0, int x1, int y1, uint8_t *buffer) {
 	gdisplay_caps_t *caps = gdisplay_ll_get_caps();
 	driver_error_t *error;
 
-	int transaction = I2C_TRANSACTION_INITIALIZER;
-	uint8_t buff[1] = {0x40};
+	for(int y=0;y<8;y++){
+		ssd1306_command(caps->device,0xb0 + index);
+		ssd1306_command(caps->device,SSD1306_SETLOWCOLUMN + 2);
+		ssd1306_command(caps->device,SSD1306_SETHIGHCOLUMN);
+		for(int x=0;x<128;x++){
+			int transaction = I2C_TRANSACTION_INITIALIZER;
+			uint8_t buff[1] = {0x40};
 
-	error = i2c_start(caps->device, &transaction);if (error) goto i2c_error;
-	error = i2c_write_address(caps->device, &transaction, caps->address, 0);if (error) goto i2c_error;
-	error = i2c_write(caps->device, &transaction, (char *)buff, 1);if (error) goto i2c_error;
-	error = i2c_write(caps->device, &transaction, (char *)dst, (caps->height * caps->width) / 8);if (error) goto i2c_error;
-	error = i2c_stop(caps->device, &transaction);if (error) goto i2c_error;
-
+			error = i2c_start(caps->device, &transaction);if (error) goto i2c_error;
+			error = i2c_write_address(caps->device, &transaction, caps->address, 0);if (error) goto i2c_error;
+			error = i2c_write(caps->device, &transaction, (char *)buff, 1);if (error) goto i2c_error;
+			error = i2c_write(caps->device, &transaction, ((char *)dst)+(y*128+x),16);if (error) goto i2c_error;
+			error = i2c_stop(caps->device, &transaction);if (error) goto i2c_error;
+		}
+	}
 	return;
 
 i2c_error:
