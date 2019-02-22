@@ -52,32 +52,26 @@
 
 #include <drivers/net.h>
 
+extern int http_start(lua_State* L);
+extern void http_stop();
+extern int http_print(lua_State* L);
+extern int http_status(lua_State* L);
+
 static int lhttp_start(lua_State* L) {
-	lua_getfield(L,LUA_REGISTRYINDEX,"my_http_start");
-	lua_call(L,0,0);
-	return 0;
+	return http_start(L);
 }
 
 static int lhttp_stop(lua_State* L) {
-	lua_getfield(L,LUA_REGISTRYINDEX,"my_http_stop");
-	lua_call(L,0,0);
+	http_stop();
 	return 0;
 }
 
 static int lhttp_print(lua_State* L) {
-	int top=lua_gettop(L);
-	lua_getfield(L,LUA_REGISTRYINDEX,"my_http_print");
-	lua_rotate(L,1,1);
-	lua_call(L,top,0);
-	return 0;
+	return http_print(L);
 }
 
 static int lhttp_status(lua_State* L) {
-	int top=lua_gettop(L);
-	lua_getfield(L,LUA_REGISTRYINDEX,"my_http_status");
-	lua_rotate(L,1,1);
-	lua_call(L,top,0);
-	return 1;
+	return http_status(L);
 }
 
 static const LUA_REG_TYPE http_map[] = {
