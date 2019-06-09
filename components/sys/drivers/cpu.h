@@ -52,7 +52,7 @@
  * ----------------------------------------------------------------
  * GPIO 
  * ----------------------------------------------------------------
-*/
+ */
 
 // ESP32 available GPIO pins
 #define GPIO0	0
@@ -257,6 +257,15 @@ typedef uint64_t gpio_pin_mask_t;
 #define CPU_I2C0_NAME  "I2C0"
 #define CPU_I2C1_NAME  "I2C1"
 
+/*
+ * ----------------------------------------------------------------
+ * RMT
+ * ----------------------------------------------------------------
+ */
+
+// Channel bounds
+#define CPU_FIRST_RMT_CH 0
+#define CPU_LAST_RMT_CH 7
 
 /*
  * ----------------------------------------------------------------
@@ -280,6 +289,8 @@ typedef uint64_t gpio_pin_mask_t;
 
 // ESP32 available ADC channels
 #define CPU_ADC_CH0  0
+#define CPU_ADC_CH1  1
+#define CPU_ADC_CH2  2
 #define CPU_ADC_CH3  3
 #define CPU_ADC_CH4  4
 #define CPU_ADC_CH5  5
@@ -288,13 +299,15 @@ typedef uint64_t gpio_pin_mask_t;
 
 // ESP32 available ADC channel names
 #define CPU_ADC_CH0_NAME  "ADC_CH0"
+#define CPU_ADC_CH1_NAME  "ADC_CH1"
+#define CPU_ADC_CH2_NAME  "ADC_CH2"
 #define CPU_ADC_CH3_NAME  "ADC_CH3"
 #define CPU_ADC_CH4_NAME  "ADC_CH4"
 #define CPU_ADC_CH5_NAME  "ADC_CH5"
 #define CPU_ADC_CH6_NAME  "ADC_CH6"
 #define CPU_ADC_CH7_NAME  "ADC_CH7"
 
-#define CPU_ADC_ALL 0b11111001
+#define CPU_ADC_ALL 0b11111111
 
 /*
  * ----------------------------------------------------------------
@@ -378,4 +391,6 @@ int cpu_reset_reason();
 int cpu_wakeup_reason();
 uint8_t cpu_gpio_number(uint8_t pin);
 void cpu_show_flash_info();
-uint32_t cpu_speed();
+uint32_t cpu_speed() __attribute__((deprecated));
+uint32_t cpu_speed_mhz();
+uint32_t cpu_speed_hz();
